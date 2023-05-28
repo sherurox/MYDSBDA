@@ -1,0 +1,107 @@
+A9
+Data Visualization II
+1. Use the inbuilt dataset 'titanic' as used in the above problem. Plot a box plot for distribution
+of age with respect to each gender along with the information about whether they survived
+or not. (Column names : 'sex' and 'age')
+2. Write observations on the inference from the above statistics
+_______________________________________________________________________________________________________________________________
+
+# Downloading the Seaborn Library
+# The seaborn library can be downloaded in a couple of ways. If you are using pip installer for Python libraries, you can
+# execute the following command to download the library:
+# pip install seaborn
+# Alternatively, if you are using the Anaconda distribution of Python, you can use execute the following command to
+# download the seaborn library:
+# conda install seaborn
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset = sns.load_dataset('titanic')
+dataset.head()
+
+# The dataset contains 891 rows and 15 columns and contains information about the passengers who boarded the unfortunate
+# Titanic ship. The original task is to predict whether or not the passenger survived depending upon different features such as
+# their age, ticket, cabin they boarded, the class of the ticket, etc. We will use the Seaborn library to see if we can find any
+# patterns in the data
+
+dataset.shape
+
+dataset.isnull().sum()
+
+# remove all null values from the dataset
+dataset = dataset.dropna()
+
+# The Joint Plot
+# The jointplot()is used to display the mutual distribution of each column. You need to pass three parameters to jointplot. The
+# first parameter is the column name for which you want to display the distribution of data on x-axis. The second parameter is
+# the column name for which you want to display the distribution of data on y-axis. Finally, the third parameter is the name of
+# the data frame.
+# Let's plot a joint plot of age and fare columns to see if we can find any relationship between the two.
+sns.jointplot(x='age', y='fare', data=dataset)
+
+# From the output, you can see that a joint plot has three parts. A distribution plot at the top for the column on the x-axis, a
+# distribution plot on the right for the column on the y-axis and a scatter plot in between that shows the mutual distribution of
+# data for both the columns. You can see that there is no correlation observed between prices and the fares.
+# You can change the type of the joint plot by passing a value for the kind parameter. For instance, if instead of scatter plot, you
+# want to display the distribution of data in the form of a hexagonal plot, you can pass the value hex for the kind parameter.
+
+
+sns.jointplot(x='age', y='fare', data=dataset, kind='hex')
+
+# In the hexagonal plot, the hexagon with most number of points gets darker color. So if you look at the above plot, you can
+# see that most of the passengers are between age 20 and 30 and most of them paid between 10-50 for the tickets.
+
+# Categorical Plots
+# Categorical plots, as the name suggests are normally used to plot categorical data. The categorical plots plot the values in the
+# categorical column against another categorical column or a numeric column. Let's see some of the most commonly used
+# categorical data.
+
+# The Bar Plot
+# The barplot() is used to display the mean value for each value in a categorical column, against a numeric column. The first
+# parameter is the categorical column, the second parameter is the numeric column while the third parameter is the dataset.
+
+# to know the mean value of the age of the male and female passengers, you can use the bar plot
+sns.barplot(x='sex', y='age', data=dataset)
+
+# you can clearly see that the average age of male passengers is just less than 40 while the average age of female passengers is
+# around 33.
+# to finding the average, the bar plot can also be used to calculate other aggregate values for each category. To do so, you
+# need to pass the aggregate function to the estimator. 
+
+# # To calculate the standard deviation for the age of each gender
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.barplot(x='sex', y='age', data=dataset, estimator=np.std)
+# we use the std aggregate function from the numpy library to calculate the standard deviation for the ages of m
+
+# Box Plot
+# The box plot is used to display the distribution of the categorical data in the form of quartiles. The center of the box shows
+# the median value. The value from the lower whisker to the bottom of the box shows the first quartile. From the bottom of the
+# box to the middle of the box lies the second quartile. From the middle of the box to the top of the box lies the third quartile
+# and finally from the top of the box to the top whisker lies the last quartile.
+
+# let's plot a box plot that displays the distribution for the age with respect to each gender. You need to pas
+sns.boxplot(x='sex', y='age', data=dataset)
+
+
+# Let's try to understand the box plot for female. The first quartile starts at around 5 and ends at 22 which means that 25% of
+# the passengers are aged between 5 and 25. The second quartile starts at around 23 and ends at around 32 which means that
+# 25% of the passengers are aged between 23 and 32. Similarly, the third quartile starts and ends between 34 and 42, hence
+# 25% passengers are aged within this range and finally the fourth or last quartile starts at 43 and ends around 65.
+# If there are any outliers or the passengers that do not belong to any of the quartiles, they are called outliers and are
+# represented by dots on the box plot.
+# if you want to see the box plots of forage of passengers of both genders, along with the information about wh
+sns.boxplot(x='sex', y='age', data=dataset, hue="survived")
+
+# If we want to see the box plots of forage of passengers of both genders,
+#  along with the information about whether or not they survived, we can pass
+#   the survived as value to the hue parameter.
+
+# We can also see the distribution of the passengers who survived. For instance,
+#  we can see that among the male passengers, on average more younger people survived as
+#   compared to the older ones. Similarly, we can see that the variation among the age of
+#    female passengers who did not survive is much greater than the age of the surviving female passengers

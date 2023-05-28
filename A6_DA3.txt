@@ -1,0 +1,101 @@
+A6 DA3
+1. Implement Simple Naïve Bayes classification algorithm using Python/R on iris.csv dataset.
+2. Compute Confusion matrix to find TP, FP, TN, FN, Accuracy, Error rate, Precision, Recall
+on the given dataset.
+_______________________________________________________________________________________________________________________
+
+//IMPORT LIBRARIES
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report, precision_score, recall_score, f1_score
+import warnings
+warnings.filterwarnings("ignore")
+%matplotlib inline
+
+//LOAD DATA
+ 
+iris = load_iris()
+iris.keys()
+ 
+x = pd.DataFrame(iris['data'], columns=iris['feature_names'])
+y = pd.DataFrame(iris['target'], columns=['target'])
+ 
+x.head()
+
+//BASIC STATS
+ 
+x.shape, y.shape
+ 
+x.info()
+ 
+y.info()
+ 
+x.describe()
+
+//DATA PREPARATION
+ 
+scaler = StandardScaler()
+x = scaler.fit_transform(x.values)
+ 
+x_train, x_test, y_train, y_test = train_test_split(x, y.values, test_size=0.2, random_state=42)
+ 
+x_train.shape, x_test.shape, y_train.shape, y_test.shape
+
+//MODEL BUILDING
+ 
+model = GaussianNB()
+ 
+model.fit(x_train, y_train)
+ 
+y_pred = model.predict(x_test)
+
+//EVALUATION
+ 
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+ 
+from sklearn.metrics import plot_confusion_matrix
+ 
+ print(confusion_matrix(y_test, y_pred))
+ 
+plot_confusion_matrix(conf_mat=cm, figsize=(5,5), show_normed=True)
+plt.show()                          #Error
+ 
+print(f"TP value is {cm[0,0]}")
+print(f"TN value is {cm[1,1] + cm[2,2]}")
+print(f"FP value is {cm[0,1] + cm[0,2]}")
+print(f"FN value is {cm[1,0] + cm[2,0]}")
+ 
+print(f"Accuracy score is {accuracy_score(y_test, y_pred)}")
+ 
+print(f"Error rate is {1 - accuracy_score(y_test, y_pred)}")
+ 
+print(f"Precision score is {precision_score(y_test, y_pred, average='macro')}")
+ 
+print(f"Recall score is {recall_score(y_test, y_pred, average='macro')}")
+ 
+print(classification_report(y_test, y_pred))
+ 
+#Example below to explain confusion matrix
+y_true = ["cat", "ant", "cat", "cat", "ant", "bird"]
+y_pred = ["ant", "ant", "cat", "cat", "ant", "cat"]
+ 
+confusion_matrix(y_true, y_pred)
+ 
+#example
+"""
+Precision: It is calculated with respect to the predicted values. For class-A, out of total predictions how many were really belong to class-A in actual dataset, is defined as the precision. It is the ratio of [i][i] cell of confusion matrix and sum of the [i] column.
+ 
+Recall: It is calculated with respect to the actual values in dataset. For class-A, out of total entries in dataset, how many were actually classified in class-A by the ML model, is defined as the recall. It is the ratio of [i][i] cell of confusion matrix and sum of the [i] row.
+ 
+F1-score: It is the harmonic mean of precision and recall.
+ 
+Support: It is the total entries of each class in the actual dataset. It is simply the sum of rows for every class-i."""

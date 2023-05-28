@@ -1,0 +1,63 @@
+A10
+. Data Visualization III
+Download the Iris flower dataset or any other dataset into a DataFrame. (e.g.,
+https://archive.ics.uci.edu/ml/datasets/Iris ). Scan the dataset and give the inference as:
+1. List down the features and their types (e.g., numeric, nominal) available in the dataset.
+2. Create a histogram for each feature in the dataset to illustrate the feature distributions.
+3. Create a boxplot for each feature in the dataset.
+4. Compare distributions and identify outliers.
+_____________________________________________________________________________________________________________________________________
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+from sklearn.datasets import load_iris
+import warnings
+warnings.filterwarnings("ignore")
+
+//LOAD AND PREPROCESS DATA
+
+data = load_iris()
+
+df = pd.DataFrame()
+df[data['feature_names']] = data['data']
+df['label'] = data['target']
+
+df.head()
+
+df.shape
+
+df.info()
+
+df.describe()
+
+//VISUALIZATION
+
+sns.heatmap(df.corr(), annot=True)
+plt.show()
+
+sns.histplot(df["sepal length (cm)"], kde=True)
+plt.show()
+
+sns.histplot(df["sepal width (cm)"], kde=True)
+plt.show()
+
+sns.histplot(df["petal length (cm)"], kde=True)
+plt.show()
+
+sns.histplot(df["petal width (cm)"], kde=True)
+plt.show()
+
+sns.boxplot(x=df['label'], y=df["sepal length (cm)"])
+plt.show()
+
+sns.boxplot(x=df['label'] ,y=df["sepal width (cm)"])
+plt.show()
+
+sns.boxplot(x=df["label"] ,y=df["petal length (cm)"])
+plt.show()
+
+sns.boxplot(x=df['label'] ,y=df["petal width (cm)"])
+plt.show()

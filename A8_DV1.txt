@@ -1,0 +1,95 @@
+A8_DV1
+Data Visualization I
+1. Use the inbuilt dataset 'titanic'. The dataset contains 891 rows and contains information
+about the passengers who boarded the unfortunate Titanic ship. Use the Seaborn library to
+see if we can find any patterns in the data.
+2. Write a code to check how the price of the ticket (column name: 'fare') for each passenger
+is distributed by plotting a histogram
+______________________________________________________________________________________________________________________________________
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+warnings.filterwarnings("ignore")
+%matplotlib inline
+
+//LOAD DATA AND BASIC STATS
+ 
+df = sns.load_dataset('titanic')
+ 
+df.shape
+ 
+df.head()
+ 
+df.info()
+ 
+df.describe()
+ 
+df.isna().sum()
+ 
+df["age"] = df["age"].fillna(df["age"].mean())
+ 
+df.isna().sum()
+ 
+//VISALIZATION
+
+df["Name"]
+
+df["Sex"].value_counts()
+
+df["Ticket"].value_counts()
+
+df["Cabin"].value_counts()
+
+df["Embarked"].value_counts()
+
+def fun1(value):
+    if (value == "male"):
+        return 1
+    else:
+        return 0
+
+def fun2(value):
+    if (value == 'S'):
+        return 0
+    elif (value == 'C'):
+        return 1
+    elif (value == 'Q'):
+        return 2
+    else:
+        return 0
+
+df["Sex"] = df["Sex"].apply(fun1)
+
+df["Embarked"] = df["Embarked"].apply(fun2)
+
+df.isna().sum()
+
+df = df.drop("Cabin", axis=1)
+
+df.shape
+
+plt.figure(figsize=(10,7))
+sns.heatmap(df.corr(), annot=True)
+plt.show()
+
+df.info()
+
+//"SURVIVED" IS THE LABEL
+
+sns.countplot(df["Survived"])
+plt.show()
+
+sns.countplot(df["Pclass"], hue=df["Survived"])
+plt.show()
+
+sns.countplot(df["Sex"], hue=df["Survived"], palette="Accent")
+plt.show()
+
+sns.countplot(df["Embarked"], hue=df["Survived"])
+plt.show()
+
+sns.histplot(df["Fare"])
+plt.show()
